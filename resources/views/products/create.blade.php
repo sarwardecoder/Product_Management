@@ -3,7 +3,7 @@
 <h1>Add New Product</h1>
 
 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-
+    @csrf
     <label>Product ID:</label>
     <input type="text" name="product_id" required>
     <br>

@@ -11,6 +11,8 @@
 @if ($product->image)
     <p><strong>Image:</strong></p>
     <img src="{{ asset('storage/' . $product->image) }}" width="200">
+    <!-- <img src="/storage/products/{{  $product->image }}" width="200"> -->
+
 @endif
 
 <a href="{{ route('products.index') }}">Back to Products</a>

@@ -23,8 +23,11 @@ class ProductController extends Controller
             'product_id' => 'required|unique:products',
             'name' => 'required',
             'price' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'required',
         ]);
+
+        // $imageName=time() . '.'.$request->image->extension();
+        // $request->image->move(public_path('products'),$imageName);
 
         $data = $request->all();
 
@@ -33,7 +36,7 @@ class ProductController extends Controller
         }
 
         Product::create($data);
-
+        dd($data);
         return redirect()->route('products.index')->with('success', 'Product added successfully.');
     }
 
