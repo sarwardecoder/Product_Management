@@ -1,8 +1,7 @@
 @extends('products.layout')
 
 @section('content')
-<h1 padding="10px">Products</h1>
-<a href="{{ route('products.create') }}">Add Product</a>
+<h1 padding="10px" class="mt-3">Products</h1>
 @if(session('success'))
     <p style="color: green;">{{ session('success') }}</p>
 @endif
@@ -12,7 +11,9 @@
         <tr>
             <th>ID</th>
             <th>Product ID</th>
-            <th>Name</th>
+            <th class="p-3 border border-gray">Name
+
+            </th>
             <th>Description</th>
             <th>Price</th>
             <th>Stock</th>
@@ -29,7 +30,7 @@
                 <td>{{ $product->description }}</td>
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->stock }}</td>
-                <td><img src="{{ asset('storage/products/' . $product->image) }}" width="50"></td>
+                <td><img src="{{ asset('storage/' . $product->image) }}" width="50"></td>
                 <td>
                     <a href="{{ route('products.show', $product) }}">View</a>
                     <a href="{{ route('products.edit', $product) }}">Edit</a>
