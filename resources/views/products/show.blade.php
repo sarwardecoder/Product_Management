@@ -1,6 +1,8 @@
 @extends('products.layout')
+@include('products.homeBtnWithProduct')
 
 @section('content')
+@include('products.homebutton')
 <h1>Product Details</h1>
 
 <p><strong>Product ID:</strong> {{ $product->product_id }}</p>
