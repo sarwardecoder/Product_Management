@@ -12,7 +12,7 @@
     <div class="col-md-8 mt-5">
         <div class="card mt-3 p-3">
             <h1 class="text-warning">Edit product - {{$product->name}}</h1>
-            <form action="/products/{{$product->id}}/update" method="GET" enctype="multipart/form-data">
+            <form action="/products/{{$product->id}}/update" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="form-group">

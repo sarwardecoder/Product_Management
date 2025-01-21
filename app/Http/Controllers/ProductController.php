@@ -77,7 +77,30 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // dd($request->all());
+        $request->validate(
+            [
+                'name' => 'required',
+                'price' => 'required',
+                'stock' => 'required',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:9999',
+            ]
+        );
+
+        $product = Product::where('id', $id)->first();
+        if (isset($request->image)) {
+            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->image->move(public_path('products/'), $imageName);
+
+        }
+        ;
+        $product->image = $imageName;
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->stock = $request->stock;
+        $product->save();
+        return back()->withSuccess('Product Has been Updated');
     }
 
     /**
