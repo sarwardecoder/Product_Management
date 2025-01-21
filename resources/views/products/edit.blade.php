@@ -1,32 +1,69 @@
 @extends('products.layout')
-@section('content')
-<h1>Edit Product</h1>
 
-<form action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
-    <label>Product ID:</label>
-    <input type="text" name="product_id" value="{{ $product->product_id }}" required>
-    <br>
-    <label>Name:</label>
-    <input type="text" name="name" value="{{ $product->name }}" required>
-    <br>
-    <label>Description:</label>
-    <textarea name="description">{{ $product->description }}</textarea>
-    <br>
-    <label>Price:</label>
-    <input type="number" step="0.01" name="price" value="{{ $product->price }}" required>
-    <br>
-    <label>Stock:</label>
-    <input type="number" name="stock" value="{{ $product->stock }}">
-    <br>
-    <label>Image:</label>
-    <input type="file" name="image">
-    @if ($product->image)
-        <p>Current Image:</p>
-        <img src="{{ asset('storage/' . $product->image) }}" width="100">
-    @endif
-    <br><br>
-    <button type="submit">Update</button>
-</form>
+@section('content')
+@if ($message = Session::get('success'))
+    <div class="alert alert-success alert-block">
+        <strong>{{$message}}</strong>
+    </div>
+
+@endif
+<div class="row justify-content-center">
+
+    <div class="col-md-8 mt-5">
+        <div class="card mt-3 p-3">
+            <h1 class="text-warning">Edit product - {{$product->name}}</h1>
+            <form action="/products/{{$product->id}}/update" method="GET" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" class="form-control" value="{{old('name', $product->name)}}">
+                    @if($errors->has('name'))
+                        <span class="text-danger">{{$errors->first('name')}}
+                        </span>
+                    @endif
+                </div>
+                <div class="form-group">
+                    <label for="name">Description</label>
+                    <textarea name="description" class="form-control"
+                        rows="3">{{old('description', $product->description)}}</textarea>
+                    @if($errors->has('description'))
+                        <span class="text-danger">{{$errors->first('description')}}
+                        </span>
+                    @endif
+                </div>
+                <div class="form-group">
+                    <label for="name">Price</label>
+                    <input type="decimal" name="price" class="form-control" value="{{old('price', $product->price)}}">
+                    @if($errors->has('price'))
+                        <span class="text-danger">{{$errors->first('price')}}
+                        </span>
+                    @endif
+                </div>
+                <div class="form-group">
+                    <label for="name">Stock</label>
+                    <input type="numeric" name="stock" class="form-control" value="{{old('stock', $product->stock)}}">
+                    @if($errors->has('stock'))
+                        <span class="text-danger">{{$errors->first('stock')}}
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Image</label>
+                    <input type="file" name="image" class="form-control" value="{{old('image', $product->image)}}">
+                    @if($errors->has('image'))
+                        <span class="text-danger">{{$errors->first('image')}}
+                        </span>
+                    @endif
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">
+                    Update Product
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
