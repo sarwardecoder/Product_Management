@@ -9,7 +9,7 @@
 </head>
 
 <body>
-   
+
 
     <div class="container">
 
@@ -28,9 +28,12 @@
 
                     </ul>
 
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    <form action="{{ route('products.index') }}" method="GET" class="mb-4">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control"
+                                placeholder="By ID, Name, or Price" value="{{ request('search') }}">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
                     </form>
                 </div>
             </nav>

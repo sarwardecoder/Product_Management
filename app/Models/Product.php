@@ -8,13 +8,13 @@ class Product extends Model
 {
     protected $fillable = [
         'name',
-        'product_id', 
-        'description', 
-        'price', 
-        'stock', 
-        'image  ', 
+        'product_id',
+        'description',
+        'price',
+        'stock',
+        'image  ',
 
-];
+    ];
 
     public static function boot()
     {
@@ -28,7 +28,8 @@ class Product extends Model
 
     public function generateProductId()
     {
-        return strtolower(preg_replace('/\s+/', '-', $this->name)) . '-' . $this->id;
+        $randomNumber = rand(3, 100000);
+        return strtolower(preg_replace('/\s+/', '-', $this->name)) . '-' . $randomNumber;
     }
 }
 

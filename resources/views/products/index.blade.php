@@ -32,10 +32,22 @@
                     <button class="btn btn-primary m-1" Action="products/show">View</button>
                     <button class="btn btn-warning m-1"> <a href="products/{{$product->id}}/edit">Edit</a>
                     </button>
-                    <button class="btn btn-danger m-1" Action="products/{{$product->id}}">Delete</button>
+                    <!-- <button class="btn btn-danger m-1" Action="products/{{$product->id}}">Delete</button> -->
+                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger m-1"
+                            onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
                 </td>
+
             </tbody>
         @endforeach
+        <div class="d-flex justify-content-center">
+        {{ $products->links() }}
+    </div>
     </table>
+    
 </div>
+
 @endsection

@@ -9,10 +9,22 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::get();
+
+        $query = Product::query();
+
+        // Search by ID, Name, or Price
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('id', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('price', 'like', "%{$search}%");
+        }
+    
+        $products = Product::take(20)->paginate(5);
         return view('products.index', compact('products'));
+
     }
 
     /**
@@ -50,7 +62,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->save();
-        return back()->withSuccess('Product Has been added');
+        return view('products.index')->withSuccess('Product Has been added');
 
 
     }
@@ -60,8 +72,9 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $product = Product::where('id', $id)->first();
+        dd($product);
+        return view('products.show', ['product' => $product]);    }
 
     /**
      * Show the form for editing the specified resource.
@@ -89,18 +102,19 @@ class ProductController extends Controller
 
         $product = Product::where('id', $id)->first();
         if (isset($request->image)) {
+            //if image updated then execute
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('products/'), $imageName);
+            $product->image = $imageName;
 
         }
         ;
-        $product->image = $imageName;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->save();
-        return back()->withSuccess('Product Has been Updated');
+        return view('products.index')->withSuccess('Product Has been Updated');
     }
 
     /**
@@ -108,6 +122,6 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return view('products.index')->withSuccess('Product Has been Deleted');
     }
 }
