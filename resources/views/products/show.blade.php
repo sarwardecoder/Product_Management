@@ -1,18 +1,10 @@
-@extends('layout')
+@extends('products.layout')
 
 @section('content')
 <div class="container mt-4">
   <h1>Product List</h1>
 
-  <!-- Search Form -->
-  <form action="{{ route('products.index') }}" method="GET" class="mb-4">
-    <div class="input-group">
-      <input type="text" name="search" class="form-control" placeholder="Search by ID, Name, or Price"
-        value="{{ request('search') }}">
-      <button type="submit" class="btn btn-primary">Search</button>
-    </div>
-  </form>
-
+ 
   <table class="table table-striped">
     <thead>
       <tr>
@@ -28,8 +20,9 @@
       </tr>
     </thead>
     <tbody>
-      @forelse ($products as $product)
-      <tr>
+
+
+    <tr>
       <td>{{ $product->id }}</td>
       <td>{{ $product->product_id }}</td>
       <td>{{ $product->name }}</td>
@@ -37,7 +30,7 @@
       <td>{{ $product->price }}</td>
       <td>{{ $product->stock }}</td>
       <td>
-        <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image" width="50">
+        <img src="{{ asset('products/' . $product->image) }}" alt="Product Image" width="50">
       </td>
       <td>{{ $product->created_at }}</td>
       <td>
@@ -51,17 +44,11 @@
         </form>
       </td>
       </tr>
-    @empty
-      <tr>
-      <td colspan="9" class="text-center">No products found.</td>
-      </tr>
-    @endforelse
+   
+
+
     </tbody>
   </table>
 
-  <!-- Pagination Links -->
-  <div class="d-flex justify-content-center">
-    {{ $products->links() }}
-  </div>
 </div>
 @endsection

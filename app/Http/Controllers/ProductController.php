@@ -11,19 +11,11 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-
-        $query = Product::query();
-
-        // Search by ID, Name, or Price
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('name', 'like', "%{$search}%")
-                  ->orWhere('price', 'like', "%{$search}%");
-        }
-    
-        $products = Product::take(20)->paginate(5);
+        $products = Product::take(20)->paginate(10);
         return view('products.index', compact('products'));
+
+
+
 
     }
 
@@ -32,8 +24,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
-        // return view('products.create', compact('products'));
+        // return view('products.create');
+        return view('products.create', compact('products'));
     }
 
     /**
@@ -54,7 +46,7 @@ class ProductController extends Controller
 
 
         $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
-        $request->image->move(public_path('products/'), $imageName);
+        $request->image->move(public_path('products'), $imageName);
         $product = new Product;
         $product->image = $imageName;
         $product->name = $request->name;
@@ -70,11 +62,14 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        $product = Product::where('id', $id)->first();
-        dd($product);
-        return view('products.show', ['product' => $product]);    }
+        $product = Product::findOrFail($id);
+        return view('products.show', compact('product'));
+    }
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -104,7 +99,7 @@ class ProductController extends Controller
         if (isset($request->image)) {
             //if image updated then execute
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
-            $request->image->move(public_path('products/'), $imageName);
+            $request->image->move(public_path('products'), $imageName);
             $product->image = $imageName;
 
         }
@@ -122,6 +117,8 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
+        $product = Product::where('id', $id)->first();
+        $product->delete();
         return view('products.index')->withSuccess('Product Has been Deleted');
     }
 }
