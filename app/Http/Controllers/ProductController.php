@@ -101,15 +101,14 @@ class ProductController extends Controller
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('products'), $imageName);
             $product->image = $imageName;
-
         }
-        ;
+
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->save();
-        return view('products.index')->withSuccess('Product Has been Updated');
+        return redirect()->route('products.index')->withSuccess('Product Has been Updated');
     }
 
     /**
@@ -117,8 +116,8 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        $product = Product::where('id', $id)->first();
+        $product = Product::findOrFail($id);
         $product->delete();
-        return view('products.index')->withSuccess('Product Has been Deleted');
+        return redirect()->route('products.index')->withSuccess('Product Has been Deleted');
     }
 }
