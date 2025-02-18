@@ -45,7 +45,7 @@
 
                         <td class="d-flex justify-content-end">
                             <!-- <button class="btn btn-primary m-1" Action="products/show">View</button> -->
-                            <button class="btn btn-warning m-1"> <a href="products/{{$product->id}}/show">Show</a>
+                            <button class="btn btn-info m-1"> <a href="products/{{$product->id}}/show">Show</a>
                                 <button class="btn btn-warning m-1"> <a href="products/{{$product->id}}/edit">Edit</a>
                                 </button>
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST"

@@ -24,8 +24,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        // return view('products.create');
-        return view('products.create', compact('products'));
+        return view('products.create');
+        //this should work as we are creating products and we do not need to pass products here.
+        // return view('products.create', compact('products'));
     }
 
     /**
@@ -44,10 +45,11 @@ class ProductController extends Controller
             ]
         );
 
-
+        
         $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
         $request->image->move(public_path('products'), $imageName);
         $product = new Product;
+        dd(public_path('products/' . $product->image));
         $product->image = $imageName;
         $product->name = $request->name;
         $product->description = $request->description;
@@ -83,33 +85,69 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        // dd($request->all());
-        $request->validate(
-            [
-                'name' => 'required',
-                'price' => 'required',
-                'stock' => 'required',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:9999',
-            ]
-        );
 
-        $product = Product::where('id', $id)->first();
-        if (isset($request->image)) {
-            //if image updated then execute
-            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
-            $request->image->move(public_path('products'), $imageName);
-            $product->image = $imageName;
-        }
+     public function update(Request $request, string $id)
+     {
+         $request->validate(
+             [
+                 'name' => 'required',
+                 'price' => 'required',
+                 'stock' => 'required',
+                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:9999',
+             ]
+         );
+     
+         $product = Product::where('id', $id)->first();
+     
+         if ($request->hasFile('image')) {
+             // Delete old image if it exists
+             if ($product->image && file_exists(public_path('products/' . $product->image))) {
+                 unlink(public_path('products/' . $product->image));
+             }
+     
+             // Upload new image
+             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+             $request->image->move(public_path('products'), $imageName);
+             $product->image = $imageName;
+         }
+     
+         $product->name = $request->name;
+         $product->description = $request->description;
+         $product->price = $request->price;
+         $product->stock = $request->stock;
+         $product->save();
+     
+         return redirect()->route('products.index')->withSuccess('Product Has been Updated');
+     }
+//previous update method
 
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->save();
-        return redirect()->route('products.index')->withSuccess('Product Has been Updated');
-    }
+    //  public function update(Request $request, string $id)
+    // {
+    //     // dd($request->all());
+    //     $request->validate(
+    //         [
+    //             'name' => 'required',
+    //             'price' => 'required',
+    //             'stock' => 'required',
+    //             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:9999',
+    //         ]
+    //     );
+
+    //     $product = Product::where('id', $id)->first();
+    //     if (isset($request->image)) {
+    //         //if image updated then execute
+    //         $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+    //         $request->image->move(public_path('products'), $imageName);
+    //         $product->image = $imageName;
+    //     }
+
+    //     $product->name = $request->name;
+    //     $product->description = $request->description;
+    //     $product->price = $request->price;
+    //     $product->stock = $request->stock;
+    //     $product->save();
+    //     return redirect()->route('products.index')->withSuccess('Product Has been Updated');
+    // }
 
     /**
      * Remove the specified resource from storage.
