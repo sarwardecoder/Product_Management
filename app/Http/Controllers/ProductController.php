@@ -14,9 +14,6 @@ class ProductController extends Controller
         $products = Product::take(20)->paginate(10);
         return view('products.index', compact('products'));
 
-
-
-
     }
 
     /**
@@ -49,15 +46,14 @@ class ProductController extends Controller
         $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
         $request->image->move(public_path('products'), $imageName);
         $product = new Product;
-        dd(public_path('products/' . $product->image));
+        // dd(public_path('products/' . $product->image));
         $product->image = $imageName;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->save();
-        return view('products.index')->withSuccess('Product Has been added');
-
+        return redirect()->route('products.index')->withSuccess('New Product Has been Added');
 
     }
 
